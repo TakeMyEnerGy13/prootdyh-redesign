@@ -314,7 +314,8 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
 .about-top{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center}
 .about-year img{width:100%;max-width:380px}
 .about-top h2{font-size:clamp(24px,2.4vw,32px);font-weight:700;line-height:1.35}
-.about-note{color:var(--faint);font-size:15.5px;line-height:1.7;max-width:88ch;margin:40px 0 0}
+.about-copy{max-width:56ch}
+.about-note{color:var(--faint);font-size:15.5px;line-height:1.7;margin:22px 0 0}
 .split{padding:80px 0}
 .split .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
 .split-img img{width:100%;border-radius:20px;box-shadow:var(--shadow)}
@@ -399,6 +400,8 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
 @media(max-width:1000px){
   .facts-grid{grid-template-columns:repeat(2,1fr);gap:30px}
   .about-top{grid-template-columns:1fr;gap:30px;text-align:center;justify-items:center}
+  .about-copy{max-width:100%}
+  .about-note{text-align:left}
   .split .wrap{grid-template-columns:1fr;gap:34px}
   .split-text{order:2}.split-img{order:1}
   .memo-grid{grid-template-columns:1fr}
