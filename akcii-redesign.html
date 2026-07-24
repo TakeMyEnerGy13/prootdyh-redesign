@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Акции на туры — «Проотдых»</title>
+<meta name="description" content="Акции на туры: раннее бронирование до −40%, скидки на Египет, Турцию, Кипр, рассрочка без переплаты и туры выходного дня.">
+<link rel="stylesheet" href="redesign.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="topbar" id="topbar">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Проотдых"><img src="assets/logo.png" alt="Проотдых"></a>
+    <input type="checkbox" id="navtog">
+    <label class="burger" for="navtog" aria-label="Меню"><span></span><span></span><span></span></label>
+    <nav class="nav">
+      <a href="kompaniya-redesign.html">Компания</a>
+      <a href="poisk-tura-redesign.html">Поиск тура</a>
+      <a href="goryashchie-redesign.html">Горящие туры</a>
+      <a href="kontakty-redesign.html">Контакты</a>
+      <a class="akcii active" href="akcii-redesign.html" aria-current="page">Акции</a>
+    </nav>
+    <div class="top-right">
+      <a class="phone" href="tel:+78125096713">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 15.5a1 1 0 0 0-1-.3l-3 .6a11 11 0 0 1-4.4-4.4l.6-3a1 1 0 0 0-.3-1L7.7 3.8a1 1 0 0 0-1.5.1A5 5 0 0 0 5 7c0 7.2 5.8 13 13 13a5 5 0 0 0 3.1-1.1 1 1 0 0 0 .1-1.5z"/></svg>
+        +7 (812) 509-67-13
+      </a>
+      <div class="socials">
+        <a href="#" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.4.4-.9.4l.3-4.6L18.6 7c.4-.3-.1-.5-.6-.2L7.6 13.3l-4.5-1.4c-1-.3-1-1 .2-1.4l17.3-6.7c.8-.3 1.5.2 1.3.8z"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.5 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.8-5.1c-.6-1-1-2.2-.6-3 .2-.4.6-1 1.1-1 .3 0 .5 0 .7.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.2.2-.2.4 0 .7a8 8 0 0 0 3.5 3.1c.3.1.5.1.7-.1l.7-.8c.2-.2.4-.3.6-.2l1.8.9c.4.2.4.4.4.8z"/></svg></a>
+        <a href="#" aria-label="VK"><svg viewBox="0 0 24 24"><path d="M12.7 16.5c-5 0-8-3.5-8.1-9.2h2.5c.1 4.2 2 6 3.4 6.4V7.3H15v2.3c1.4-.2 2.9-1.8 3.4-3.3h2.4a6.9 6.9 0 0 1-3.1 4.4c1.6.9 2.7 2 3.4 3.8h-2.7c-.5-1.3-1.4-2.4-3-2.7v2.7z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PAGE HERO ============ -->
+<section class="phero">
+  <div class="wrap">
+    <h1>Акции: тот же отдых, <em>дешевле</em></h1>
+    <p class="lead">Скидки на туры, бонусные ночи, подарки и рассрочка без переплаты. Нажмите на карточку — внутри условия акции.</p>
+  </div>
+</section>
+
+<!-- ============ PROMOS GRID ============ -->
+<section class="promos-sec">
+  <div class="wrap">
+    <div class="pgrid">
+      <a class="ptile is-big t-grad" href="#p-early">
+        <span class="pt-badge">до −40%</span>
+        <span class="pt-city">Раннее бронирование лета</span>
+        <span class="pt-note">Забронируйте летний отпуск по ценам зимы</span>
+      </a>
+      <a class="ptile t-red" href="#p-egypt">
+        <span class="pt-badge">−35%</span>
+        <span class="pt-city">Египет</span>
+        <span class="pt-note">Хургада, всё включено</span>
+      </a>
+      <a class="ptile t-blue" href="#p-turkey">
+        <span class="pt-badge">−20%</span>
+        <span class="pt-city">Турция</span>
+        <span class="pt-note">Ультра всё включено</span>
+      </a>
+      <a class="ptile is-big t-grad2" href="#p-ny">
+        <span class="pt-badge">Новый год</span>
+        <span class="pt-city">Таиланд, Бангкок</span>
+        <span class="pt-note">Прямые рейсы на новогодние каникулы</span>
+      </a>
+      <a class="ptile t-magenta" href="#p-maldives">
+        <span class="pt-badge">+2 ночи</span>
+        <span class="pt-city">Мальдивы</span>
+        <span class="pt-note">Медовый месяц в подарок</span>
+      </a>
+      <a class="ptile t-green" href="#p-sochi">
+        <span class="pt-badge">−15%</span>
+        <span class="pt-city">Сочи</span>
+        <span class="pt-note">Тур выходного дня</span>
+      </a>
+      <a class="ptile t-orange" href="#p-split">
+        <span class="pt-badge">0%</span>
+        <span class="pt-city">Рассрочка</span>
+        <span class="pt-note">Отпуск сейчас — оплата частями</span>
+      </a>
+      <a class="ptile t-cyan" href="#p-cyprus">
+        <span class="pt-badge">−25%</span>
+        <span class="pt-city">Кипр</span>
+        <span class="pt-note">Бархатный сезон</span>
+      </a>
+      <a class="ptile t-blue" href="#p-uae">
+        <span class="pt-badge">раннее зимнее</span>
+        <span class="pt-city">ОАЭ, Дубай</span>
+        <span class="pt-note">Отели 4–5★ на первой линии</span>
+      </a>
+      <a class="ptile t-red" href="#p-rus">
+        <span class="pt-badge">−10%</span>
+        <span class="pt-city">Экскурсии по России</span>
+        <span class="pt-note">Карелия, Казань, Байкал</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-band">
+  <div class="wrap">
+    <div class="cta-box">
+      <div>
+        <h2>Не нашли свою акцию?</h2>
+        <p>Условия обновляются каждую неделю. Напишите нам — проверим, что действует на ваши даты.</p>
+      </div>
+      <a class="btn btn-lg" href="redesign.html#contact">Спросить менеджера</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="f-left">
+      <span>© 2026 Турагентство «Проотдых»</span>
+      <span class="f-reg">Реестровый номер турагентства РТА XXXXXX</span>
+    </div>
+    <div class="socials">
+      <a href="#" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.4.4-.9.4l.3-4.6L18.6 7c.4-.3-.1-.5-.6-.2L7.6 13.3l-4.5-1.4c-1-.3-1-1 .2-1.4l17.3-6.7c.8-.3 1.5.2 1.3.8z"/></svg></a>
+      <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.5 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.8-5.1c-.6-1-1-2.2-.6-3 .2-.4.6-1 1.1-1 .3 0 .5 0 .7.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.2.2-.2.4 0 .7a8 8 0 0 0 3.5 3.1c.3.1.5.1.7-.1l.7-.8c.2-.2.4-.3.6-.2l1.8.9c.4.2.4.4.4.8z"/></svg></a>
+      <a href="#" aria-label="VK"><svg viewBox="0 0 24 24"><path d="M12.7 16.5c-5 0-8-3.5-8.1-9.2h2.5c.1 4.2 2 6 3.4 6.4V7.3H15v2.3c1.4-.2 2.9-1.8 3.4-3.3h2.4a6.9 6.9 0 0 1-3.1 4.4c1.6.9 2.7 2 3.4 3.8h-2.7c-.5-1.3-1.4-2.4-3-2.7v2.7z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODALS (:target, zero-JS) ============ -->
+<div class="pmodal" id="p-early">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Раннее бронирование лета — до −40%</h3>
+    <p class="pmodal__sub">Забронируйте летний отпуск заранее и сэкономьте до 40%.</p>
+    <div class="pmodal__txt">Лучшие отели разбирают за полгода. Фиксируйте цену зимы на летний тур: полный выбор номеров и минимальная предоплата.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-egypt">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Египет со скидкой −35%</h3>
+    <p class="pmodal__sub">Хургада и Шарм-эль-Шейх, всё включено, вылеты каждую неделю.</p>
+    <div class="pmodal__txt">Отели 5★ с собственным пляжем и аквапарком. Скидка действует при бронировании тура от 7 ночей до конца месяца.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-turkey">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Турция: ультра всё включено −20%</h3>
+    <p class="pmodal__sub">Анталия, Кемер, Белек — лучшие курорты по специальной цене.</p>
+    <div class="pmodal__txt">Концепция Ultra All Inclusive: рестораны à la carte, спа и анимация. Скидка −20% на туры с вылетом в текущем сезоне.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-ny">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Новый год в Бангкоке</h3>
+    <p class="pmodal__sub">Прямые рейсы на новогодние каникулы — самые удобные даты.</p>
+    <div class="pmodal__txt">Вылет 27–29 декабря, возвращение после 8 января: полные каникулы в тепле. Отели у моря и в центре города, экскурсионная программа на выбор.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-maldives">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Мальдивы: медовый месяц в подарок</h3>
+    <p class="pmodal__sub">2 ночи в водной вилле бесплатно для молодожёнов.</p>
+    <div class="pmodal__txt">Романтический ужин на пляже, украшение виллы и трансфер на гидросамолёте. Предъявите свидетельство о браке при заселении.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-sochi">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Сочи: тур выходного дня −15%</h3>
+    <p class="pmodal__sub">Море, горы и Олимпийский парк на два дня.</p>
+    <div class="pmodal__txt">Отель 4★ на набережной, завтраки и экскурсия в Красную Поляну. Скидка −15% на заезды с пятницы по воскресенье.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-split">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Рассрочка 0% на любой тур</h3>
+    <p class="pmodal__sub">Отпуск сейчас — оплата равными частями, без переплаты.</p>
+    <div class="pmodal__txt">Оформление за 10 минут в офисе, первый взнос от 20%. Действует на туры по России и за рубеж стоимостью от 60 000 ₽.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-cyprus">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Кипр: бархатный сезон −25%</h3>
+    <p class="pmodal__sub">Ларнака, Пафос, Айя-Напа — тёплое море в сентябре и октябре.</p>
+    <div class="pmodal__txt">Комфортные +28°, минимум туристов и золотые пляжи. Скидка −25% на отели 4★ у моря при раннем бронировании.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-uae">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>ОАЭ, Дубай: раннее зимнее бронирование</h3>
+    <p class="pmodal__sub">Отели 4–5★ на первой линии, всё включено.</p>
+    <div class="pmodal__txt">Специальные цены на зимний сезон в Эмиратах при бронировании заранее: небоскрёбы, пустыня и тёплый залив в разгар петербургской зимы.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<div class="pmodal" id="p-rus">
+  <a class="pmodal__bg" href="#_" aria-label="Закрыть"></a>
+  <div class="pmodal__win">
+    <a class="pmodal__x" href="#_" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <h3>Экскурсионные туры по России −10%</h3>
+    <p class="pmodal__sub">Карелия, Казань, Байкал — готовые маршруты с гидом.</p>
+    <div class="pmodal__txt">Группы до 15 человек, проживание и переезды включены. Скидка −10% при бронировании за 30 дней до старта маршрута.
+      <br><a class="btn" href="redesign.html#contact">Узнать условия</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var bar=document.getElementById('topbar');
+  function onScroll(){bar.classList.toggle('is-solid', window.scrollY>40);}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
