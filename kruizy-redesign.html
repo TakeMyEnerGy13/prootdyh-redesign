@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Контакты — «ПроОтдых» | офис в Тосно</title>
-<meta name="description" content="Контакты турагентства «ПроОтдых»: телефон 8 (921) 883-24-24, почта pro-otd@mail.ru, офис в Тосно (ул. Ленина, 71). Будни 11:00–18:00.">
+<title>Круизы — речные и морские | «ПроОтдых»</title>
+<meta name="description" content="Поиск круизов онлайн: речные круизы по России и СНГ, речные и морские круизы за рубежом. Даты, теплоход, город отправления и бюджет — подберём и забронируем.">
+<link rel="preconnect" href="https://bitrix.infoflot.com" crossorigin>
+<link rel="dns-prefetch" href="//bitrix.infoflot.com">
 <link rel="stylesheet" href="redesign.css">
 </head>
 <body>
@@ -18,9 +20,9 @@
     <nav class="nav">
       <a href="kompaniya-redesign.html">Компания</a>
       <a href="poisk-tura-redesign.html">Поиск тура</a>
-      <a href="kruizy-redesign.html">Круизы</a>
+      <a class="active" href="kruizy-redesign.html" aria-current="page">Круизы</a>
       <a href="goryashchie-redesign.html">Горящие туры</a>
-      <a class="active" href="kontakty-redesign.html" aria-current="page">Контакты</a>
+      <a href="kontakty-redesign.html">Контакты</a>
       <a class="akcii" href="akcii-redesign.html">Акции</a>
       <div class="nav-extra">
         <a class="nav-phone" href="tel:+79218832424">
@@ -52,40 +54,28 @@
 <!-- ============ PAGE HERO ============ -->
 <section class="phero">
   <div class="wrap">
-    <h1>Мы рядом — <em>в Тосно</em></h1>
-    <p class="lead">Приходите в офис, звоните или пишите в мессенджер — как удобнее. В рабочие часы отвечаем в течение 15 минут.</p>
+    <h1>Круизы <em>речные и морские</em></h1>
+    <p class="lead">Речные круизы по России и СНГ, речные и морские маршруты за рубежом. Выберите даты, город отправления, теплоход и бюджет — поиск покажет свободные каюты, а мы поможем выбрать и забронируем.</p>
   </div>
 </section>
 
-<!-- ============ OFFICES + MAP ============ -->
-<section class="contacts-sec">
+<!-- ============ CRUISE SEARCH ============ -->
+<section class="widget-sec">
   <div class="wrap">
-    <div class="map-wrap">
-      <iframe title="Карта — офис в Тосно"
-        src="https://yandex.ru/map-widget/v1/?ll=30.878636%2C59.539669&z=17&pt=30.878636%2C59.539669%2Cpm2rdm"
-        width="100%" height="520" loading="lazy" allowfullscreen></iframe>
+    <div class="cw-mount" id="cruiseMount">
+      <div class="cw-skeleton" aria-hidden="true">
+        <div class="cw-tabs"><span></span><span></span><span></span></div>
+        <div class="cw-form">
+          <div class="cw-row"><i></i><i></i><i></i><b></b></div>
+          <div class="cw-row"><i></i><i></i><i></i><b class="ghost"></b></div>
+        </div>
+        <div class="cw-cards"><u></u><u></u></div>
+      </div>
+      <p class="cw-status" id="cruiseStatus" role="status">Загружаем расписание круизов…</p>
+      <div class="infoflotWidget" data-id="YTo0OntzOjI6IklEIjtpOjU0ODA7czo0OiJVU0VSIjtzOjIwOiJjSEp2TFc5MFpFQnRZV2xzTG5KMSI7czo2OiJSQU5ET00iO3M6ODoiN20wMWc0aDMiO3M6MTU6IklORk9GTE9ULUFQSUtFWSI7czo0MDoiMDZiOGNiNDYwZmZjNGM4NTVlMGJiMTA2OTUwYjc4NTgwY2Y5YjJkNyI7fQ==" data-index="1"></div>
     </div>
-    <div class="ocards">
-      <div class="ocard">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
-        <b>Тосно, Ленинградская обл.</b>
-        <span>ул. Ленина, д. 71, офис 12</span>
-        <span>будни 11:00–18:00</span>
-      </div>
-      <div class="ocard">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.3a1 1 0 0 1 1 1 11 11 0 0 0 .55 3.5 1 1 0 0 1-.24 1l-2.2 2.3z"/></svg></span>
-        <b>Телефоны агентства</b>
-        <span>звоните в будни с 11:00 до 18:00</span>
-        <a class="tel" href="tel:+79218832424">8 (921) 883-24-24</a>
-        <a class="tel" href="tel:+79110941871">8 (911) 094-18-71</a>
-      </div>
-      <div class="ocard">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v.4l8 5 8-5V6H4zm16 2.3-8 5-8-5V18h16V8.3z"/></svg></span>
-        <b>Электронная почта</b>
-        <span>ответим в течение дня</span>
-        <a class="tel" href="mailto:pro-otd@mail.ru">pro-otd@mail.ru</a>
-      </div>
-    </div>
+    <noscript><p class="wb-note">Поиск круизов работает при включённом JavaScript. Позвоните нам — подберём круиз вручную.</p></noscript>
+    <p class="wb-note">Ищете обычный тур? <a href="poisk-tura-redesign.html">Перейдите к поиску туров →</a></p>
   </div>
 </section>
 
@@ -94,10 +84,10 @@
   <div class="wrap">
     <div class="cta-box">
       <div>
-        <h2>Не хочется звонить? Оставьте заявку</h2>
-        <p>Заполните короткую форму на главной — вернёмся с вариантами тура за 15 минут.</p>
+        <h2>Не знаете, какой теплоход выбрать?</h2>
+        <p>Расскажите, когда и с кем планируете плыть, — подберём маршрут и каюту под ваш бюджет. Бесплатно.</p>
       </div>
-      <a class="btn btn-lg" href="redesign.html#contact">Оставить заявку</a>
+      <a class="btn btn-lg" href="index.html#contact">Подобрать круиз</a>
     </div>
   </div>
 </section>
@@ -124,6 +114,30 @@
   window.addEventListener('scroll',onScroll,{passive:true});
   onScroll();
 })();
+// виджет поиска круизов Infoflot + скелетон на время загрузки
+(function(d){
+  var mount=d.getElementById('cruiseMount'),status=d.getElementById('cruiseStatus'),done=false;
+  function ready(){
+    if(done) return; done=true;
+    mount.classList.add('is-ready');
+    if(status) status.remove();
+  }
+  var obs=new MutationObserver(function(){
+    var f=mount.querySelector('iframe');
+    if(!f) return;
+    obs.disconnect();
+    f.addEventListener('load',ready,{once:true});
+  });
+  obs.observe(mount,{childList:true,subtree:true});
+  setTimeout(function(){ obs.disconnect(); ready(); },20000);
+})(document);
+(function(d,w){
+  var h=d.getElementsByTagName("script")[0],s=d.createElement("script");
+  s.src="https://bitrix.infoflot.com/local/templates/infoflot/frontend/js/infoflotIframe.js";
+  s.async=!0;
+  s.onload=function(){w.createInfoflotWidget("https://bitrix.infoflot.com/rest/api/search.filter/",{key:"YTo0OntzOjI6IklEIjtpOjU0ODA7czo0OiJVU0VSIjtzOjIwOiJjSEp2TFc5MFpFQnRZV2xzTG5KMSI7czo2OiJSQU5ET00iO3M6ODoiN20wMWc0aDMiO3M6MTU6IklORk9GTE9ULUFQSUtFWSI7czo0MDoiMDZiOGNiNDYwZmZjNGM4NTVlMGJiMTA2OTUwYjc4NTgwY2Y5YjJkNyI7fQ==",referer:encodeURIComponent(location.href)})};
+  h.parentNode.insertBefore(s,h);
+})(document,window);
 </script>
 
 </body>
