@@ -1,11 +1,11 @@
 /* ================= 2026 ================= */
 
 /* ---------- Fonts (local, same as original) ---------- */
-@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Light.ttf");font-weight:300;font-display:swap}
-@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Regular.ttf");font-weight:400;font-display:swap}
-@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Medium.ttf");font-weight:500;font-display:swap}
-@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Bold.ttf");font-weight:700;font-display:swap}
-@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Black.ttf");font-weight:900;font-display:swap}
+@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Light.woff2") format("woff2"),url("assets/fonts/Roboto-Light.ttf") format("truetype");font-weight:300;font-display:swap}
+@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Regular.woff2") format("woff2"),url("assets/fonts/Roboto-Regular.ttf") format("truetype");font-weight:400;font-display:swap}
+@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Medium.woff2") format("woff2"),url("assets/fonts/Roboto-Medium.ttf") format("truetype");font-weight:500;font-display:swap}
+@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Bold.woff2") format("woff2"),url("assets/fonts/Roboto-Bold.ttf") format("truetype");font-weight:700;font-display:swap}
+@font-face{font-family:Roboto;src:url("assets/fonts/Roboto-Black.woff2") format("woff2"),url("assets/fonts/Roboto-Black.ttf") format("truetype");font-weight:900;font-display:swap}
 
 /* ---------- Tokens ---------- */
 :root{
@@ -58,14 +58,14 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
 .topbar.is-solid{background:rgba(30,10,42,.82);
   backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);
   box-shadow:0 1px 0 rgba(255,255,255,.08)}
-.topbar .wrap{display:flex;align-items:center;gap:34px;height:84px}
+.topbar .wrap{display:flex;align-items:center;gap:26px;height:84px}
 .topbar.is-solid .wrap{height:68px}
 .logo{line-height:0;flex:none}
 .logo img{height:48px;width:auto;transition:height .3s ease}
 .topbar.is-solid .logo img{height:40px}
-.nav{display:flex;gap:28px;align-items:center}
+.nav{display:flex;gap:22px;align-items:center}
 .nav a{position:relative;color:#fff;font-weight:700;font-size:13.5px;letter-spacing:.04em;
-  text-transform:uppercase;opacity:.92;transition:opacity .25s ease}
+  text-transform:uppercase;white-space:nowrap;opacity:.92;transition:opacity .25s ease}
 .nav a:hover{opacity:1}
 .nav a:not(.akcii)::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:2px;
   background:#fff;border-radius:2px;transform:scaleX(0);transition:transform .28s ease}
@@ -363,6 +363,9 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
 .widget-box .wb-in small{display:block;font-size:14px;font-weight:400;margin-top:12px}
 /* ---- Скелетон виджета круизов ---- */
 .cw-mount{position:relative;min-height:520px}
+.ru-mount{position:relative;min-height:520px}
+.ru-mount.is-ready .cw-status{display:none}
+
 .cw-mount.is-ready .cw-skeleton{display:none}
 .cw-mount .infoflotWidget{position:relative;z-index:1}
 .cw-skeleton{position:absolute;inset:0;z-index:0;pointer-events:none}
