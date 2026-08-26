@@ -107,8 +107,12 @@
 (function(d){
   var mount=d.getElementById('ruMount'),status=d.getElementById('ruStatus'),done=false;
   function ready(){ if(done) return; done=true; mount.classList.add('is-ready'); if(status) status.remove(); }
+  // у .ru-mount задан min-height, поэтому его высота не признак готовности —
+  // ждём именно iframe, который Stells подставляет внутрь .s-partnership
   var poll=setInterval(function(){
-    if(done||mount.offsetHeight>400){ clearInterval(poll); ready(); }
+    if(done){ clearInterval(poll); return; }
+    var f=mount.querySelector('.s-partnership iframe');
+    if(f&&f.offsetHeight>100){ clearInterval(poll); ready(); }
   },250);
   setTimeout(function(){ clearInterval(poll); ready(); },25000);
 })(document);
