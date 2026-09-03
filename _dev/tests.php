@@ -97,4 +97,15 @@ t_eq(promos_load($dir . '/nope.json', $dir . '/nope')['promos'], [], 'нет н�
 array_map('unlink', glob($backups . '/*.json'));
 @unlink($file); @rmdir($backups); @rmdir($dir);
 
+$live = promos_read(__DIR__ . '/../data/akcii.json');
+t_true($live !== null, 'боевой JSON читается');
+t_eq(count($live['promos']), 10, 'перенесены все десять акций');
+$ids = array_column($live['promos'], 'id');
+t_eq(count(array_unique($ids)), 10, 'все id уникальны');
+t_eq($ids[0], 'early', 'первой идёт раннее бронирование');
+foreach ($live['promos'] as $p) {
+    $others = array_values(array_diff($ids, [$p['id']]));
+    t_eq(promos_validate($p, $others), [], 'акция ' . $p['id'] . ' проходит валидацию');
+}
+
 t_report();
