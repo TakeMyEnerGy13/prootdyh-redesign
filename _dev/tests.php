@@ -183,4 +183,21 @@ t_eq(array_column(admin_move($list, 'c', 1), 'id'), ['a', 'b', 'c'], 'после
 t_eq(array_column(admin_delete($list, 'b'), 'id'), ['a', 'c'], 'удаление вырезает акцию');
 t_eq(count(admin_delete($list, 'нет')), 3, 'удаление неизвестного id ничего не меняет');
 
+$post = [
+    'badge' => '  −20% ', 'title' => ' Турция ', 'note' => '',
+    'theme' => 't-blue', 'big' => 'on', 'enabled' => 'on',
+    'modal_title' => 'Турция', 'modal_sub' => '', 'modal_text' => 'Текст',
+];
+$promo = admin_promo_from_post($post);
+t_eq($promo['badge'], '−20%', 'пробелы по краям обрезаются');
+t_eq($promo['big'], true, 'галка стала true');
+t_eq($promo['enabled'], true, 'показ включён галкой');
+$noBig = $post; unset($noBig['big']);
+t_eq(admin_promo_from_post($noBig)['big'], false, 'снятая галка — false');
+t_true(array_key_exists('modal_sub', $promo), 'пустое необязательное поле сохраняется');
+
+$new = admin_promo_from_post($post);
+$new['id'] = promos_unique_id(promos_slug($new['title']), ['turciya']);
+t_eq($new['id'], 'turciya-2', 'id занят — берётся следующий');
+
 t_report();

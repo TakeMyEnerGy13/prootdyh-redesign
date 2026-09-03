@@ -64,7 +64,11 @@ if (!admin_is_logged_in()) {
     exit;
 }
 
-$data = promos_load($dataFile, $backupDir);
+$data       = promos_load($dataFile, $backupDir);
+$action     = (string)($_GET['action'] ?? '');
+$formErrors = [];
+$formPromo  = promos_defaults();
+$editId     = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($_POST['form'] ?? '', ['toggle', 'move'], true)) {
     if (!admin_csrf_ok($_POST['csrf'] ?? null)) {
@@ -81,17 +85,122 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($_POST['form'] ?? '', ['to
     header('Location: index.php?saved=1');
     exit;
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'save') {
+    if (!admin_csrf_ok($_POST['csrf'] ?? null)) {
+        http_response_code(400);
+        exit('Форма устарела. Обновите страницу и повторите.');
+    }
+    $editId = (string)($_POST['edit_id'] ?? '');
+    $promo  = admin_promo_from_post($_POST);
+    $ids    = array_column($data['promos'], 'id');
+
+    if ($editId !== '' && admin_find_index($data['promos'], $editId) !== null) {
+        $promo['id'] = $editId;                       // адрес не меняем: на него могут вести ссылки
+        $others = array_values(array_diff($ids, [$editId]));
+    } else {
+        $promo['id'] = promos_unique_id(promos_slug($promo['title']), $ids);
+        $others = $ids;
+    }
+
+    $errors = promos_validate($promo, $others);
+    if ($errors === []) {
+        $i = admin_find_index($data['promos'], $promo['id']);
+        if ($i === null) {
+            $data['promos'][] = $promo;
+        } else {
+            $data['promos'][$i] = $promo;
+        }
+        promos_write($dataFile, $data, $backupDir);
+        header('Location: index.php?saved=1');
+        exit;
+    }
+    $formPromo  = $promo;
+    $formErrors = $errors;
+    $action     = 'form';
+}
+
+if ($action === 'edit') {
+    $i = admin_find_index($data['promos'], (string)($_GET['id'] ?? ''));
+    if ($i === null) {
+        header('Location: index.php');
+        exit;
+    }
+    $formPromo = $data['promos'][$i];
+    $editId    = $formPromo['id'];
+    $action    = 'form';
+} elseif ($action === 'new') {
+    $action = 'form';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Акции — управление</title>
+  <title><?= $action === 'form' ? 'Правка акции' : 'Акции' ?> — управление</title>
   <link rel="stylesheet" href="../style.css?v=20260903">
 </head>
 <body>
-<main class="wrap adm-wrap adm-wide">
+<main class="wrap adm-wrap<?= $action === 'form' ? '' : ' adm-wide' ?>">
+
+<?php if ($action === 'form'): ?>
+
+  <h1><?= $editId === '' ? 'Новая акция' : 'Правка акции' ?></h1>
+
+  <?php if ($formErrors): ?>
+    <ul class="adm-error">
+      <?php foreach ($formErrors as $e): ?>
+        <li><?= promos_e($e) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+
+  <form method="post" class="adm-form">
+    <input type="hidden" name="form" value="save">
+    <input type="hidden" name="csrf" value="<?= admin_csrf_token() ?>">
+    <input type="hidden" name="edit_id" value="<?= promos_e($editId) ?>">
+
+    <label>Бейдж <span>левый верхний угол плитки, например −35%</span>
+      <input type="text" name="badge" maxlength="20" required value="<?= promos_e($formPromo['badge']) ?>"></label>
+
+    <label>Заголовок плитки
+      <input type="text" name="title" maxlength="60" required value="<?= promos_e($formPromo['title']) ?>"></label>
+
+    <label>Подпись <span>необязательно</span>
+      <input type="text" name="note" maxlength="90" value="<?= promos_e($formPromo['note']) ?>"></label>
+
+    <label>Цвет плитки
+      <select name="theme">
+        <?php foreach (promos_themes() as $t): ?>
+          <option value="<?= $t ?>" <?= $formPromo['theme'] === $t ? 'selected' : '' ?>><?= $t ?></option>
+        <?php endforeach; ?>
+      </select></label>
+    <div class="adm-swatches">
+      <?php foreach (promos_themes() as $t): ?><span class="adm-dot <?= $t ?>" title="<?= $t ?>"></span><?php endforeach; ?>
+    </div>
+
+    <label class="adm-check"><input type="checkbox" name="big" <?= $formPromo['big'] ? 'checked' : '' ?>>
+      Широкая плитка (занимает две колонки)</label>
+
+    <label class="adm-check"><input type="checkbox" name="enabled" <?= $formPromo['enabled'] ? 'checked' : '' ?>>
+      Показывать на сайте</label>
+
+    <label>Заголовок окна <span>виден, когда посетитель нажал на плитку</span>
+      <input type="text" name="modal_title" maxlength="90" required value="<?= promos_e($formPromo['modal_title']) ?>"></label>
+
+    <label>Подзаголовок окна <span>необязательно</span>
+      <input type="text" name="modal_sub" maxlength="160" value="<?= promos_e($formPromo['modal_sub']) ?>"></label>
+
+    <label>Текст условий
+      <textarea name="modal_text" rows="6" maxlength="1200" required><?= promos_e($formPromo['modal_text']) ?></textarea></label>
+
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="index.php">Отмена</a>
+  </form>
+
+<?php else: ?>
+
   <div class="adm-top">
     <h1>Акции</h1>
     <p class="adm-links">
@@ -128,6 +237,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($_POST['form'] ?? '', ['to
       <a href="?action=delete&amp;id=<?= promos_e($p['id']) ?>">Удалить</a>
     </article>
   <?php endforeach; ?>
+
+<?php endif; ?>
+
 </main>
 </body>
 </html>
