@@ -108,4 +108,34 @@ foreach ($live['promos'] as $p) {
     t_eq(promos_validate($p, $others), [], 'акция ' . $p['id'] . ' проходит валидацию');
 }
 
+require __DIR__ . '/../lib/render.php';
+
+$p = [
+    'id' => 'egypt', 'enabled' => true, 'badge' => '−35%', 'title' => 'Египет',
+    'note' => 'Хургада', 'theme' => 't-red', 'big' => false,
+    'modal_title' => 'Египет', 'modal_sub' => 'Хургада', 'modal_text' => "Первая строка\nВторая строка",
+];
+
+$tile = promos_render_tile($p);
+t_true(str_contains($tile, 'href="#p-egypt"'), 'плитка ссылается на якорь модалки');
+t_true(str_contains($tile, 'class="ptile t-red"'), 'тема попала в класс');
+t_true(!str_contains($tile, 'is-big'), 'обычная плитка без is-big');
+t_true(str_contains(promos_render_tile(['big' => true] + $p), 'ptile is-big t-red'), 'широкая плитка получает is-big');
+
+$modal = promos_render_modal($p);
+t_true(str_contains($modal, 'id="p-egypt"'), 'у модалки нужный якорь');
+t_true(str_contains($modal, '<br />') || str_contains($modal, '<br>'), 'перенос строки стал <br>');
+t_true(str_contains($modal, 'href="/#contact"'), 'кнопка ведёт на форму заявки');
+
+$evil = ['title' => '<script>alert(1)</script>', 'note' => 'кавычка " и амперсанд &'] + $p;
+$evilTile = promos_render_tile($evil);
+t_true(!str_contains($evilTile, '<script>'), 'скрипт из заголовка экранирован');
+t_true(str_contains($evilTile, '&amp;'), 'амперсанд экранирован');
+
+$data = ['version' => 1, 'promos' => [
+    ['id' => 'a', 'enabled' => true] + promos_defaults(),
+    ['id' => 'b', 'enabled' => false] + promos_defaults(),
+]];
+t_eq(count(promos_visible($data)), 1, 'скрытая акция не выводится');
+
 t_report();
