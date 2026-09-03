@@ -51,6 +51,72 @@ function promos_validate(array $promo, array $otherIds): array {
     return $errors;
 }
 
+function promos_write(string $file, array $data, string $backupDir, int $keep = 10): bool {
+    if (!is_dir($backupDir)) {
+        @mkdir($backupDir, 0755, true);
+    }
+
+    // Прежняя версия уезжает в бэкап до того, как мы её перезапишем.
+    if (is_file($file) && promos_read($file) !== null) {
+        // Микросекунды в имени: несколько правок в одну секунду должны сохранить
+        // хронологический порядок, иначе сортировка по имени поднимет не ту версию.
+        $mt = microtime(true);
+        $stamp = date('Ymd-His', (int)$mt)
+               . '-' . sprintf('%06d', (int)round(($mt - floor($mt)) * 1e6))
+               . '-' . bin2hex(random_bytes(2));
+        @copy($file, $backupDir . '/akcii-' . $stamp . '.json');
+        promos_rotate_backups($backupDir, $keep);
+    }
+
+    $json = json_encode(
+        $data,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
+    if ($json === false) {
+        return false;
+    }
+
+    // Пишем рядом и переносим поверх: обрыв скрипта не оставит обрезанный файл.
+    $tmp = $file . '.tmp' . bin2hex(random_bytes(4));
+    if (file_put_contents($tmp, $json, LOCK_EX) === false) {
+        @unlink($tmp);
+        return false;
+    }
+    if (!rename($tmp, $file)) {
+        @unlink($tmp);
+        return false;
+    }
+    @chmod($file, 0644);
+    return true;
+}
+
+function promos_rotate_backups(string $backupDir, int $keep = 10): void {
+    $files = glob($backupDir . '/akcii-*.json') ?: [];
+    if (count($files) <= $keep) {
+        return;
+    }
+    sort($files); // имена начинаются с даты, поэтому сортировка по имени = по времени
+    foreach (array_slice($files, 0, count($files) - $keep) as $old) {
+        @unlink($old);
+    }
+}
+
+function promos_load(string $file, string $backupDir): array {
+    $data = promos_read($file);
+    if ($data !== null) {
+        return $data;
+    }
+    $files = glob($backupDir . '/akcii-*.json') ?: [];
+    rsort($files);
+    foreach ($files as $candidate) {
+        $data = promos_read($candidate);
+        if ($data !== null) {
+            return $data;
+        }
+    }
+    return ['version' => 1, 'promos' => []];
+}
+
 function promos_slug(string $title): string {
     $map = [
         'а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'zh',

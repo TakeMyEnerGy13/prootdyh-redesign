@@ -381,8 +381,6 @@ for ($i = 0; $i < 14; $i++) {
 }
 t_eq(count(glob($backups . '/*.json')), 10, 'бэкапов не больше десяти');
 
-$raw = file_get_contents($file);
-t_true(str_contains($raw, 'Егип') === false, 'ASCII-эскейпов нет — проверка на кириллицу ниже');
 promos_write($file, ['version' => 1, 'promos' => [['id' => 'c', 'title' => 'Египет'] + promos_defaults()]], $backups);
 t_true(str_contains(file_get_contents($file), 'Египет'), 'кириллица пишется как есть, без \\u');
 
@@ -411,7 +409,12 @@ function promos_write(string $file, array $data, string $backupDir, int $keep = 
 
     // Прежняя версия уезжает в бэкап до того, как мы её перезапишем.
     if (is_file($file) && promos_read($file) !== null) {
-        $stamp = date('Ymd-His') . '-' . bin2hex(random_bytes(2));
+        // Микросекунды в имени: несколько правок в одну секунду должны сохранить
+        // хронологический порядок, иначе сортировка по имени поднимет не ту версию.
+        $mt = microtime(true);
+        $stamp = date('Ymd-His', (int)$mt)
+               . '-' . sprintf('%06d', (int)round(($mt - floor($mt)) * 1e6))
+               . '-' . bin2hex(random_bytes(2));
         @copy($file, $backupDir . '/akcii-' . $stamp . '.json');
         promos_rotate_backups($backupDir, $keep);
     }
@@ -469,7 +472,7 @@ function promos_load(string $file, string $backupDir): array {
 - [ ] **Step 4: Убедиться, что тесты проходят**
 
 Run: `bash tools/deploy-dev.sh lib/promos.php _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `29 passed, 0 failed`
+Expected: `28 passed, 0 failed`
 
 - [ ] **Step 5: Коммит**
 
@@ -570,7 +573,7 @@ Require all denied
 - [ ] **Step 5: Убедиться, что тесты проходят**
 
 Run: `bash tools/deploy-dev.sh data/akcii.json data/.htaccess lib/.htaccess _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `43 passed, 0 failed`
+Expected: `42 passed, 0 failed`
 
 Run: `curl -s -o /dev/null -w "%{http_code}\n" https://prootdyhspb.ru/data/akcii.json`
 Expected: `403`
@@ -714,7 +717,7 @@ $promos = promos_visible($data);
 - [ ] **Step 5: Проверить в браузере**
 
 Run: `bash tools/deploy-dev.sh akcii.php lib/render.php _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `53 passed, 0 failed`
+Expected: `52 passed, 0 failed`
 
 Открыть `https://prootdyhspb.ru/akcii.php` и `https://prootdyhspb.ru/akcii` (пока отдаёт старый `.html`), сравнить отрисовку: число плиток, порядок, цвета, широкие карточки, открытие каждой из десяти модалок. Расхождений быть не должно.
 
@@ -985,7 +988,7 @@ echo '<a href="?action=logout">Выйти</a>';
 Сгенерировать пароль и хеш, положить `data/config.php` на хостинг (в git не коммитить), пароль передать через файл для `curl --netrc-file`, не в переписку.
 
 Run: `bash tools/deploy-dev.sh upravlenie/index.php upravlenie/auth.php data/config.sample.php _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `62 passed, 0 failed`
+Expected: `61 passed, 0 failed`
 
 Открыть `https://prootdyhspb.ru/upravlenie/`, ввести неверный пароль пять раз — на пятой попытке текст меняется на сообщение о паузе. Войти верным паролем после снятия блокировки (удалить `data/login_attempts.json`), убедиться, что «Выйти» возвращает форму входа.
 
@@ -1173,7 +1176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($_POST['form'] ?? '', ['to
 - [ ] **Step 5: Проверить**
 
 Run: `bash tools/deploy-dev.sh upravlenie/index.php upravlenie/actions.php style.css _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `72 passed, 0 failed`
+Expected: `71 passed, 0 failed`
 
 В браузере: подвинуть акцию вверх и вниз, скрыть и показать — после каждого действия открыть `/akcii.php` и убедиться, что порядок и состав совпадают. Проверить, что в `data/backups/` появились копии.
 
@@ -1342,7 +1345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'save') 
 - [ ] **Step 5: Проверить**
 
 Run: `bash tools/deploy-dev.sh upravlenie/index.php upravlenie/actions.php _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `78 passed, 0 failed`
+Expected: `77 passed, 0 failed`
 
 В браузере: создать акцию с заголовком «Тестовая акция», убедиться, что она появилась на `/akcii.php` с якорем `#p-testovaya-akciya`; отправить форму с пустым заголовком — вернулась та же форма с текстом ошибки и сохранёнными полями; отредактировать существующую акцию и проверить, что её адрес не изменился.
 
@@ -1379,7 +1382,7 @@ t_eq(array_keys($after), [0], 'ключи массива переиндекси�
 - [ ] **Step 2: Убедиться в результате прогона**
 
 Run: `bash tools/deploy-dev.sh _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `80 passed, 0 failed` (обе проверки проходят — `admin_delete` уже написана в Task 8; тест закрепляет поведение, на которое опирается экран удаления).
+Expected: `79 passed, 0 failed` (обе проверки проходят — `admin_delete` уже написана в Task 8; тест закрепляет поведение, на которое опирается экран удаления).
 
 - [ ] **Step 3: Экран подтверждения**
 
@@ -1424,7 +1427,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'delete'
 - [ ] **Step 4: Проверить**
 
 Run: `bash tools/deploy-dev.sh upravlenie/index.php _dev/tests.php && curl -s https://prootdyhspb.ru/_dev/tests.php`
-Expected: `80 passed, 0 failed`
+Expected: `79 passed, 0 failed`
 
 В браузере: удалить созданную в Task 9 тестовую акцию, проверить, что она исчезла и с `/akcii.php`, и из списка, а в `data/backups/` осталась версия с ней.
 

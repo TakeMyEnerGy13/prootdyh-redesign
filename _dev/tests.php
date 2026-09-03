@@ -68,4 +68,33 @@ t_eq(promos_unique_id('egipet', []), 'egipet', 'свободный id не ме�
 t_eq(promos_unique_id('egipet', ['egipet']), 'egipet-2', 'занятый получает -2');
 t_eq(promos_unique_id('egipet', ['egipet', 'egipet-2']), 'egipet-3', 'дальше -3');
 
+$dir = sys_get_temp_dir() . '/promos_test_' . bin2hex(random_bytes(4));
+mkdir($dir . '/backups', 0755, true);
+$file = $dir . '/akcii.json';
+$backups = $dir . '/backups';
+
+$one = ['version' => 1, 'promos' => [['id' => 'a'] + promos_defaults()]];
+t_true(promos_write($file, $one, $backups), 'первая запись удалась');
+t_eq(promos_read($file)['promos'][0]['id'], 'a', 'записанное читается обратно');
+t_eq(count(glob($backups . '/*.json')), 0, 'первая запись бэкап не создаёт');
+
+$two = ['version' => 1, 'promos' => [['id' => 'b'] + promos_defaults()]];
+promos_write($file, $two, $backups);
+t_eq(count(glob($backups . '/*.json')), 1, 'вторая запись сохранила прежнюю версию');
+
+for ($i = 0; $i < 14; $i++) {
+    promos_write($file, ['version' => 1, 'promos' => [['id' => 'x' . $i] + promos_defaults()]], $backups);
+}
+t_eq(count(glob($backups . '/*.json')), 10, 'бэкапов не больше десяти');
+
+promos_write($file, ['version' => 1, 'promos' => [['id' => 'c', 'title' => 'Египет'] + promos_defaults()]], $backups);
+t_true(str_contains(file_get_contents($file), 'Египет'), 'кириллица пишется как есть, без \\u');
+
+file_put_contents($file, '{битый');
+t_eq(promos_load($file, $backups)['promos'][0]['id'], 'x13', 'битый файл — поднимается свежий бэкап');
+t_eq(promos_load($dir . '/nope.json', $dir . '/nope')['promos'], [], 'нет ни файла, ни бэкапов — пустой список');
+
+array_map('unlink', glob($backups . '/*.json'));
+@unlink($file); @rmdir($backups); @rmdir($dir);
+
 t_report();
