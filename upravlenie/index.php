@@ -120,6 +120,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'save') 
     $action     = 'form';
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'delete') {
+    if (!admin_csrf_ok($_POST['csrf'] ?? null)) {
+        http_response_code(400);
+        exit('Форма устарела. Обновите страницу и повторите.');
+    }
+    $data['promos'] = admin_delete($data['promos'], (string)($_POST['id'] ?? ''));
+    promos_write($dataFile, $data, $backupDir);
+    header('Location: index.php?saved=1');
+    exit;
+}
+
+$victim = null;
+if ($action === 'delete') {
+    $i = admin_find_index($data['promos'], (string)($_GET['id'] ?? ''));
+    if ($i === null) {
+        header('Location: index.php');
+        exit;
+    }
+    $victim = $data['promos'][$i];
+}
+
 if ($action === 'edit') {
     $i = admin_find_index($data['promos'], (string)($_GET['id'] ?? ''));
     if ($i === null) {
@@ -138,13 +159,26 @@ if ($action === 'edit') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= $action === 'form' ? 'Правка акции' : 'Акции' ?> — управление</title>
+  <title><?= $action === 'form' ? 'Правка акции' : ($action === 'delete' ? 'Удаление акции' : 'Акции') ?> — управление</title>
   <link rel="stylesheet" href="../style.css?v=20260903">
 </head>
 <body>
-<main class="wrap adm-wrap<?= $action === 'form' ? '' : ' adm-wide' ?>">
+<main class="wrap adm-wrap<?= in_array($action, ['form', 'delete'], true) ? '' : ' adm-wide' ?>">
 
-<?php if ($action === 'form'): ?>
+<?php if ($action === 'delete'): ?>
+
+  <h1>Удалить акцию?</h1>
+  <p>Будет удалена акция «<b><?= promos_e($victim['title']) ?></b>»
+     с бейджем «<?= promos_e($victim['badge']) ?>». Отменить это в интерфейсе нельзя.</p>
+  <form method="post" class="adm-form">
+    <input type="hidden" name="form" value="delete">
+    <input type="hidden" name="csrf" value="<?= admin_csrf_token() ?>">
+    <input type="hidden" name="id" value="<?= promos_e($victim['id']) ?>">
+    <button class="btn" type="submit">Удалить</button>
+    <a href="index.php">Отмена</a>
+  </form>
+
+<?php elseif ($action === 'form'): ?>
 
   <h1><?= $editId === '' ? 'Новая акция' : 'Правка акции' ?></h1>
 

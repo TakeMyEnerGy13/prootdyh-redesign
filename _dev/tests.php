@@ -200,4 +200,12 @@ $new = admin_promo_from_post($post);
 $new['id'] = promos_unique_id(promos_slug($new['title']), ['turciya']);
 t_eq($new['id'], 'turciya-2', 'id занят — берётся следующий');
 
+$list2 = [
+    ['id' => 'keep', 'enabled' => true] + promos_defaults(),
+    ['id' => 'drop', 'enabled' => true] + promos_defaults(),
+];
+$after = admin_delete($list2, 'drop');
+t_eq(array_column($after, 'id'), ['keep'], 'после удаления остаётся одна акция');
+t_eq(array_keys($after), [0], 'ключи массива переиндексированы');
+
 t_report();
