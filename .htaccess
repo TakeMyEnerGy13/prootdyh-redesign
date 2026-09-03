@@ -23,7 +23,16 @@ RewriteRule ^ / [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+([a-z-]+)\.html[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# /page -> отдаём page.html без редиректа (расширение скрыто от посетителя)
+# то же для .php: /akcii.php -> /akcii
+RewriteCond %{THE_REQUEST} \s/+([a-z-]+)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# /page -> page.php, если есть; иначе page.html (расширение скрыто от посетителя)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([a-z-]+)/?$ $1.php [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/$1.html -f
