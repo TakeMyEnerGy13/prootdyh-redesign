@@ -161,4 +161,26 @@ $hash = password_hash('pa$$w0rd', PASSWORD_DEFAULT);
 t_true(password_verify('pa$$w0rd', $hash), 'хеш проверяется');
 t_true(!password_verify('другой', $hash), 'чужой пароль не проходит');
 
+require __DIR__ . '/../upravlenie/actions.php';
+
+$list = [
+    ['id' => 'a', 'enabled' => true] + promos_defaults(),
+    ['id' => 'b', 'enabled' => true] + promos_defaults(),
+    ['id' => 'c', 'enabled' => false] + promos_defaults(),
+];
+
+t_eq(admin_find_index($list, 'b'), 1, 'индекс по id');
+t_eq(admin_find_index($list, 'нет'), null, 'неизвестный id — null');
+
+t_eq(admin_toggle($list, 'a')[0]['enabled'], false, 'показ выключается');
+t_eq(admin_toggle($list, 'c')[2]['enabled'], true, 'показ включается');
+
+t_eq(array_column(admin_move($list, 'b', -1), 'id'), ['b', 'a', 'c'], 'вверх меняет местами с соседом');
+t_eq(array_column(admin_move($list, 'b', 1), 'id'), ['a', 'c', 'b'], 'вниз меняет местами с соседом');
+t_eq(array_column(admin_move($list, 'a', -1), 'id'), ['a', 'b', 'c'], 'первую вверх не двигаем');
+t_eq(array_column(admin_move($list, 'c', 1), 'id'), ['a', 'b', 'c'], 'последнюю вниз не двигаем');
+
+t_eq(array_column(admin_delete($list, 'b'), 'id'), ['a', 'c'], 'удаление вырезает акцию');
+t_eq(count(admin_delete($list, 'нет')), 3, 'удаление неизвестного id ничего не меняет');
+
 t_report();
