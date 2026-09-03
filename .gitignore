@@ -1,2 +1,5 @@
 ﻿.gstack/
 .gstack/
+data/config.php
+data/login_attempts.json
+data/backups/*.json

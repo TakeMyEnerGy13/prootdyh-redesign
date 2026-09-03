@@ -138,4 +138,27 @@ $data = ['version' => 1, 'promos' => [
 ]];
 t_eq(count(promos_visible($data)), 1, 'скрытая акция не выводится');
 
+require __DIR__ . '/../upravlenie/auth.php';
+
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.9, 10.0.0.1';
+$_SERVER['REMOTE_ADDR'] = '10.0.0.1';
+t_eq(admin_client_ip(), '203.0.113.9', 'IP берётся из X-Forwarded-For');
+unset($_SERVER['HTTP_X_FORWARDED_FOR']);
+t_eq(admin_client_ip(), '10.0.0.1', 'без прокси — REMOTE_ADDR');
+
+$att = sys_get_temp_dir() . '/att_' . bin2hex(random_bytes(4)) . '.json';
+t_true(!admin_login_blocked($att, '1.2.3.4'), 'чистый IP не заблокирован');
+for ($i = 0; $i < 4; $i++) { admin_note_failure($att, '1.2.3.4'); }
+t_true(!admin_login_blocked($att, '1.2.3.4'), 'после четырёх попыток ещё можно');
+admin_note_failure($att, '1.2.3.4');
+t_true(admin_login_blocked($att, '1.2.3.4'), 'после пятой — блок');
+t_true(!admin_login_blocked($att, '5.6.7.8'), 'блок только для своего IP');
+admin_reset_failures($att, '1.2.3.4');
+t_true(!admin_login_blocked($att, '1.2.3.4'), 'удачный вход снимает счётчик');
+@unlink($att);
+
+$hash = password_hash('pa$$w0rd', PASSWORD_DEFAULT);
+t_true(password_verify('pa$$w0rd', $hash), 'хеш проверяется');
+t_true(!password_verify('другой', $hash), 'чужой пароль не проходит');
+
 t_report();
