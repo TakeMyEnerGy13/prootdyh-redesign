@@ -51,6 +51,42 @@ function promos_validate(array $promo, array $otherIds): array {
     return $errors;
 }
 
+function promos_slug(string $title): string {
+    $map = [
+        'а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'zh',
+        'з'=>'z','и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o',
+        'п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c',
+        'ч'=>'ch','ш'=>'sh','щ'=>'sch','ъ'=>'','ы'=>'y','ь'=>'','э'=>'e','ю'=>'yu','я'=>'ya',
+    ];
+    $s = mb_strtolower(trim($title), 'UTF-8');
+    $s = strtr($s, $map);
+    $s = preg_replace('/[^a-z0-9]+/u', '-', $s);
+    $s = trim($s, '-');
+    if ($s === '') {
+        return 'akciya';
+    }
+    if (strlen($s) > 40) {
+        $s = trim(substr($s, 0, 40), '-');
+    }
+    return $s;
+}
+
+function promos_unique_id(string $base, array $takenIds): string {
+    if (!in_array($base, $takenIds, true)) {
+        return $base;
+    }
+    for ($n = 2; $n < 1000; $n++) {
+        $candidate = $base . '-' . $n;
+        if (strlen($candidate) > 40) {
+            $candidate = trim(substr($base, 0, 40 - strlen((string)$n) - 1), '-') . '-' . $n;
+        }
+        if (!in_array($candidate, $takenIds, true)) {
+            return $candidate;
+        }
+    }
+    return $base . '-' . bin2hex(random_bytes(3));
+}
+
 function promos_read(string $file): ?array {
     if (!is_file($file) || !is_readable($file)) {
         return null;

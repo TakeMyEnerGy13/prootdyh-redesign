@@ -56,4 +56,16 @@ file_put_contents($tmp, '{"version":1,"promos":');
 t_eq(promos_read($tmp), null, 'битый JSON — null');
 unlink($tmp);
 
+t_eq(promos_slug('Египет'), 'egipet', 'транслит одного слова');
+t_eq(promos_slug('Новый год в Бангкоке'), 'novyy-god-v-bangkoke', 'пробелы в дефисы');
+t_eq(promos_slug('Раннее бронирование — лета!'), 'rannee-bronirovanie-leta', 'знаки убираются');
+t_eq(promos_slug('ОАЭ, Дубай'), 'oae-dubay', 'запятая не даёт двойной дефис');
+t_eq(promos_slug('Сочи 2026'), 'sochi-2026', 'цифры сохраняются');
+t_eq(promos_slug('!!!'), 'akciya', 'без букв — запасное слово');
+t_true(mb_strlen(promos_slug(str_repeat('Кипр ', 20))) <= 40, 'длина ограничена 40');
+
+t_eq(promos_unique_id('egipet', []), 'egipet', 'свободный id не меняется');
+t_eq(promos_unique_id('egipet', ['egipet']), 'egipet-2', 'занятый получает -2');
+t_eq(promos_unique_id('egipet', ['egipet', 'egipet-2']), 'egipet-3', 'дальше -3');
+
 t_report();
