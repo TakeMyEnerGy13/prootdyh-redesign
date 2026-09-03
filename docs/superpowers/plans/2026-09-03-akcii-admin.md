@@ -209,9 +209,9 @@ function promos_validate(array $promo, array $otherIds): array {
         $value = trim((string)($promo[$field] ?? ''));
         $len = mb_strlen($value, 'UTF-8');
         if ($len < $min) {
-            $errors[] = "«$label»: поле обязательно";
+            $errors[] = "«{$label}»: поле обязательно";
         } elseif ($len > $max) {
-            $errors[] = "«$label»: не длиннее $max символов, сейчас $len";
+            $errors[] = "«{$label}»: не длиннее {$max} символов, сейчас {$len}";
         }
     }
 
