@@ -43,7 +43,7 @@ if (!admin_is_logged_in()) {
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Вход — управление акциями</title>
-      <link rel="stylesheet" href="../style.css?v=20260903">
+      <link rel="stylesheet" href="../style.css?v=20260903b">
     </head>
     <body>
       <main class="wrap adm-wrap">
@@ -160,7 +160,7 @@ if ($action === 'edit') {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $action === 'form' ? 'Правка акции' : ($action === 'delete' ? 'Удаление акции' : 'Акции') ?> — управление</title>
-  <link rel="stylesheet" href="../style.css?v=20260903">
+  <link rel="stylesheet" href="../style.css?v=20260903b">
 </head>
 <body>
 <main class="wrap adm-wrap<?= in_array($action, ['form', 'delete'], true) ? '' : ' adm-wide' ?>">
@@ -268,7 +268,7 @@ if ($action === 'edit') {
         <input type="hidden" name="id" value="<?= promos_e($p['id']) ?>">
         <button><?= ($p['enabled'] ?? false) ? 'Скрыть' : 'Показать' ?></button></form>
       <a href="?action=edit&amp;id=<?= promos_e($p['id']) ?>">Изменить</a>
-      <a href="?action=delete&amp;id=<?= promos_e($p['id']) ?>">Удалить</a>
+      <a class="adm-del" href="?action=delete&amp;id=<?= promos_e($p['id']) ?>">Удалить</a>
     </article>
   <?php endforeach; ?>
 

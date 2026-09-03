@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /upravlenie/
+Disallow: /_dev/
