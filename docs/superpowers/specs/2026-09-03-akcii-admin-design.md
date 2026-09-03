@@ -43,6 +43,7 @@
 ```
 akcii.php                  публичная страница, рендерит из JSON
 lib/promos.php             чтение, запись, валидация, транслитерация
+lib/render.php             шаблоны плитки и модалки, экранирование
 lib/.htaccess              deny from all
 data/.htaccess             deny from all
 data/akcii.json            акции, единственный источник правды
@@ -51,6 +52,8 @@ data/config.sample.php     образец конфига, в git
 data/login_attempts.json   счётчик неудачных входов
 data/backups/*.json        10 последних версий, откат руками
 upravlenie/index.php       вход, список акций, формы
+upravlenie/auth.php        сессия, проверка пароля, CSRF, счётчик попыток
+upravlenie/actions.php     операции над списком: показ, порядок, удаление
 ```
 
 `data/` и `lib/` закрыты `deny from all`: JSON секретов не содержит, но конфиг с хешем пароля
