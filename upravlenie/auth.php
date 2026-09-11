@@ -13,13 +13,8 @@ function admin_config(): array {
 }
 
 function admin_client_ip(): string {
-    $fwd = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
-    if ($fwd !== '') {
-        $first = trim(explode(',', $fwd)[0]);
-        if (filter_var($first, FILTER_VALIDATE_IP)) {
-            return $first;
-        }
-    }
+    // X-Forwarded-For reaches PHP exactly as the client sent it (checked on the hosting),
+    // so trusting it would let anyone bypass the login limit; REMOTE_ADDR is the real IP.
     return (string)($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
 }
 

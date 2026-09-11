@@ -140,11 +140,10 @@ t_eq(count(promos_visible($data)), 1, 'скрытая акция не вывод
 
 require __DIR__ . '/../upravlenie/auth.php';
 
-$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.9, 10.0.0.1';
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.9';
 $_SERVER['REMOTE_ADDR'] = '10.0.0.1';
-t_eq(admin_client_ip(), '203.0.113.9', 'IP берётся из X-Forwarded-For');
+t_eq(admin_client_ip(), '10.0.0.1', 'подделанный X-Forwarded-For не подменяет IP');
 unset($_SERVER['HTTP_X_FORWARDED_FOR']);
-t_eq(admin_client_ip(), '10.0.0.1', 'без прокси — REMOTE_ADDR');
 
 $att = sys_get_temp_dir() . '/att_' . bin2hex(random_bytes(4)) . '.json';
 t_true(!admin_login_blocked($att, '1.2.3.4'), 'чистый IP не заблокирован');
