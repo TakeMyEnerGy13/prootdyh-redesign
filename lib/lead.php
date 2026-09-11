@@ -19,6 +19,7 @@ function lead_from_post(array $post): array {
         $value = $post[$field] ?? '';
         $lead[$field] = is_string($value) ? lead_clean($value) : '';
     }
+    $lead['consent'] = ($post['soglasie'] ?? '') === '1';
     return $lead;
 }
 
@@ -54,6 +55,10 @@ function lead_validate(array $lead): array {
         $errors[] = 'Пожелания — не длиннее 500 символов';
     }
 
+    if (($lead['consent'] ?? false) !== true) {
+        $errors[] = 'Нужно согласие на обработку персональных данных';
+    }
+
     return $errors;
 }
 
@@ -67,7 +72,8 @@ function lead_message(array $lead, string $when): array {
           . "Имя: {$lead['name']}\n"
           . 'Телефон: ' . lead_phone_format($lead['phone']) . "\n"
           . "Куда хотите поехать: {$wish}\n\n"
-          . "Отправлено: {$when}\n";
+          . "Отправлено: {$when}\n"
+          . "Согласие на обработку персональных данных: отмечено в форме\n";
 
     return [
         'subject' => lead_mime_word('Заявка с сайта: ' . $lead['name']),

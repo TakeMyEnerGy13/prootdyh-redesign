@@ -214,12 +214,16 @@ t_eq(lead_clean("\xff\xfe"), '', 'битый UTF-8 — пустая строка
 t_eq(lead_from_post([])['name'], '', 'нет полей — пустые строки');
 t_eq(lead_from_post(['name' => ['массив']])['name'], '', 'массив вместо строки не роняет');
 
-$lead = lead_from_post(['name' => ' Анна ', 'phone' => '+7 (921) 883-24-24', 'wish' => '']);
+$lead = lead_from_post(['name' => ' Анна ', 'phone' => '+7 (921) 883-24-24', 'wish' => '', 'soglasie' => '1']);
 t_eq(lead_validate($lead), [], 'корректная заявка проходит');
 t_eq(count(lead_validate(['name' => ''] + $lead)), 1, 'без имени — ошибка');
 t_eq(count(lead_validate(['phone' => '12-34'] + $lead)), 1, 'короткий номер — ошибка');
 t_eq(count(lead_validate(['name' => str_repeat('я', 81)] + $lead)), 1, 'имя длиннее 80 — ошибка');
 t_eq(count(lead_validate(['wish' => str_repeat('я', 501)] + $lead)), 1, 'пожелание длиннее 500 — ошибка');
+t_eq(lead_validate(['consent' => false] + $lead), ['Нужно согласие на обработку персональных данных'], 'без согласия — ошибка');
+t_eq(lead_from_post(['soglasie' => 'on'])['consent'], false, 'согласие засчитывается только со значением 1');
+t_eq(lead_from_post([])['consent'], false, 'нет галочки — нет согласия');
+t_true(str_contains(base64_decode(lead_message($lead, 'x')['body']), 'Согласие на обработку персональных данных: отмечено'), 'согласие указано в письме');
 
 $m = lead_message(['wish' => 'море, сентябрь'] + $lead, '11.09.2026 14:05');
 t_eq(mb_decode_mimeheader($m['subject']), 'Заявка с сайта: Анна', 'тема декодируется');

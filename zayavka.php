@@ -14,7 +14,7 @@ function zayavka_reply(bool $json, int $code, bool $ok, string $message): never 
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8">'
        . '<meta name="viewport" content="width=device-width,initial-scale=1">'
        . '<meta name="robots" content="noindex"><title>Заявка — ПроОтдых</title>'
-       . '<link rel="stylesheet" href="style.css?v=20260911b"></head>'
+       . '<link rel="stylesheet" href="style.css?v=20260911c"></head>'
        . '<body><main class="wrap" style="padding-block:80px"><h2>' . $m . '</h2>'
        . '<p><a class="btn" href="/#contact">Вернуться на сайт</a></p></main></body></html>';
     exit;

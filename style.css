@@ -222,6 +222,12 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
 .form-msg.is-ok{color:#1f8a4c}
 .form-msg.is-err{color:var(--accent)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;color:var(--body);cursor:pointer}
+.form .consent input{width:18px;height:18px;flex:none;margin:1px 0 0;padding:0;border:0;background:none;
+  box-shadow:none;accent-color:var(--accent);cursor:pointer}
+.form .consent input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.consent a,.pd-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.consent a:hover,.pd-note a:hover{color:var(--accent)}
 .msgr{display:flex;flex-direction:column;gap:12px;margin-top:auto;
   padding-top:22px;border-top:1px solid var(--line)}
 .msgr>span{color:var(--faint);font-size:14px}
@@ -260,6 +266,8 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
   padding-top:26px;padding-bottom:26px;font-size:13px}
 .f-left{display:flex;flex-direction:column;gap:4px}
 .f-reg{color:rgba(255,255,255,.4)}
+.f-link{color:rgba(255,255,255,.4);text-decoration:underline;text-underline-offset:3px}
+.f-link:hover{color:#fff}
 .footer .socials a{background:rgba(255,255,255,.1)}
 .footer .socials a:hover{background:var(--accent)}
 
@@ -321,6 +329,13 @@ h2 em,h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:tex
   border:1px solid var(--line)}
 .map-wrap iframe{display:block;width:100%;border:0}
 .contacts-sec{padding:80px 0}
+.legal{padding:70px 0 90px}
+.legal-body{max-width:760px}
+.legal-meta{color:var(--faint);font-size:14px;margin:0 0 32px}
+.legal-body h2{font-size:clamp(20px,2vw,24px);font-weight:700;letter-spacing:0;margin:40px 0 12px}
+.legal-body p,.legal-body li{font-size:15.5px;line-height:1.7;margin:0 0 10px}
+.legal-body ul{padding-left:22px;margin:0 0 10px}
+.legal-body a{color:var(--accent);overflow-wrap:anywhere}
 .ocards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:40px}
 .ocard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 32px;
   box-shadow:var(--shadow)}
