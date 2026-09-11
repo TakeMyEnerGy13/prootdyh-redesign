@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://prootdyhspb.ru/assets/og-image.jpg">
 <meta property="og:url" content="https://prootdyhspb.ru/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="style.css?v=20260903b">
+<link rel="stylesheet" href="style.css?v=20260911">
 </head>
 <body>
 
@@ -215,11 +215,13 @@
           <p class="eyebrow">Бесплатный подбор</p>
           <h2>Расскажите, куда хотите, — <em>вернёмся с вариантами за 15 минут</em></h2>
           <p class="cc-note">В рабочие часы отвечаем в течение 15 минут, вечером — утром следующего дня.</p>
-          <form class="form" onsubmit="return false">
-            <label class="fld"><span>Ваше имя</span><input type="text" placeholder="Как к вам обращаться" autocomplete="name"></label>
-            <label class="fld"><span>Телефон</span><input type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></label>
-            <label class="fld"><span>Куда хотите поехать <em>— необязательно</em></span><input type="text" placeholder="Например: море, сентябрь, до 150 тысяч на двоих"></label>
+          <form class="form" id="leadForm" action="/zayavka" method="post">
+            <label class="fld"><span>Ваше имя</span><input type="text" name="name" placeholder="Как к вам обращаться" autocomplete="name" required maxlength="80"></label>
+            <label class="fld"><span>Телефон</span><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="tel" required maxlength="30"></label>
+            <label class="fld"><span>Куда хотите поехать <em>— необязательно</em></span><input type="text" name="wish" placeholder="Например: море, сентябрь, до 150 тысяч на двоих" maxlength="500"></label>
+            <label class="hp" aria-hidden="true">Не заполняйте это поле<input type="text" name="leave_empty" tabindex="-1" autocomplete="off"></label>
             <button class="btn" type="submit">Получить варианты</button>
+            <p class="form-msg" role="status" hidden></p>
             <p class="pd-note">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.</p>
           </form>
         </div>
@@ -304,6 +306,22 @@
       });
     },{threshold:.35});
     io.observe(grid);
+  }
+  // lead form: send without reload; without JS the form still posts to /zayavka
+  var form=document.getElementById('leadForm');
+  if(form && window.fetch){
+    var msg=form.querySelector('.form-msg'), btn=form.querySelector('button[type=submit]');
+    var show=function(ok,text){msg.textContent=text;msg.className='form-msg '+(ok?'is-ok':'is-err');msg.hidden=false;};
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      btn.disabled=true;
+      msg.hidden=true;
+      fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+        .then(function(r){return r.json();})
+        .then(function(d){show(d.ok,d.message);if(d.ok) form.reset();})
+        .catch(function(){show(false,'Не удалось отправить заявку. Позвоните нам: 8 (921) 883-24-24');})
+        .then(function(){btn.disabled=false;});
+    });
   }
 })();
 </script>

@@ -208,4 +208,42 @@ $after = admin_delete($list2, 'drop');
 t_eq(array_column($after, 'id'), ['keep'], 'после удаления остаётся одна акция');
 t_eq(array_keys($after), [0], 'ключи массива переиндексированы');
 
+require __DIR__ . '/../lib/lead.php';
+
+t_eq(lead_clean("  Анна\r\nBcc: x@y.ru "), 'Анна Bcc: x@y.ru', 'переводы строк схлопываются в пробел');
+t_eq(lead_clean("\xff\xfe"), '', 'битый UTF-8 — пустая строка');
+t_eq(lead_from_post([])['name'], '', 'нет полей — пустые строки');
+t_eq(lead_from_post(['name' => ['массив']])['name'], '', 'массив вместо строки не роняет');
+
+$lead = lead_from_post(['name' => ' Анна ', 'phone' => '+7 (921) 883-24-24', 'wish' => '']);
+t_eq(lead_validate($lead), [], 'корректная заявка проходит');
+t_eq(count(lead_validate(['name' => ''] + $lead)), 1, 'без имени — ошибка');
+t_eq(count(lead_validate(['phone' => '12-34'] + $lead)), 1, 'короткий номер — ошибка');
+t_eq(count(lead_validate(['name' => str_repeat('я', 81)] + $lead)), 1, 'имя длиннее 80 — ошибка');
+t_eq(count(lead_validate(['wish' => str_repeat('я', 501)] + $lead)), 1, 'пожелание длиннее 500 — ошибка');
+
+$m = lead_message(['wish' => 'море, сентябрь'] + $lead, '11.09.2026 14:05');
+t_eq(mb_decode_mimeheader($m['subject']), 'Заявка с сайта: Анна', 'тема декодируется');
+$body = base64_decode($m['body']);
+t_true(str_contains($body, 'Телефон: +7 (921) 883-24-24'), 'телефон в письме');
+t_true(str_contains($body, 'Куда хотите поехать: море, сентябрь'), 'пожелание в письме');
+t_true(str_contains(base64_decode(lead_message($lead, 'x')['body']), 'Куда хотите поехать: —'), 'пустое пожелание — прочерк');
+t_true(str_contains($m['headers']['From'], '<info@prootdyhspb.ru>'), 'From на домене сайта');
+$evilLead = lead_from_post(['name' => "Анна\r\nBcc: spam@x.ru", 'phone' => '89218832424', 'wish' => '']);
+$evilMsg = lead_message($evilLead, 'x');
+t_true(!preg_match('/[\r\n]/', $evilMsg['subject']), 'в теме нет переводов строк');
+foreach ($evilMsg['headers'] as $k => $v) {
+    t_true(!preg_match('/[\r\n]/', $v), "заголовок {$k} без переводов строк");
+}
+
+$rf = sys_get_temp_dir() . '/lead_' . bin2hex(random_bytes(4)) . '.json';
+$okN = true;
+for ($i = 0; $i < 5; $i++) { $okN = $okN && lead_rate_ok($rf, '1.2.3.4'); }
+t_true($okN, 'пять заявок подряд проходят');
+t_true(!lead_rate_ok($rf, '1.2.3.4'), 'шестая за 10 минут — отказ');
+t_true(lead_rate_ok($rf, '5.6.7.8'), 'лимит только для своего IP');
+file_put_contents($rf, json_encode(['9.9.9.9' => array_fill(0, 5, time() - 700)]));
+t_true(lead_rate_ok($rf, '9.9.9.9'), 'старые попытки не считаются');
+@unlink($rf);
+
 t_report();
