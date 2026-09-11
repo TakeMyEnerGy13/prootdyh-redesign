@@ -20,7 +20,7 @@ $promos = promos_visible($data);
 <meta property="og:image" content="https://prootdyhspb.ru/assets/og-image.jpg">
 <meta property="og:url" content="https://prootdyhspb.ru/akcii">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="style.css?v=20260911">
+<link rel="stylesheet" href="style.css?v=20260911b">
 </head>
 <body>
 

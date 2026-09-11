@@ -22,6 +22,20 @@ function lead_from_post(array $post): array {
     return $lead;
 }
 
+/** Russian number as +7(999)688-77-97, or '' if it is not 11 digits (a leading 8 counts as 7). */
+function lead_phone_format(string $phone): string {
+    $d = (string)preg_replace('/\D+/', '', $phone);
+    if (strlen($d) === 10) {
+        $d = '7' . $d;
+    } elseif (strlen($d) === 11 && $d[0] === '8') {
+        $d = '7' . substr($d, 1);
+    }
+    if (strlen($d) !== 11 || $d[0] !== '7' || mb_strlen($phone, 'UTF-8') > 30) {
+        return '';
+    }
+    return '+7(' . substr($d, 1, 3) . ')' . substr($d, 4, 3) . '-' . substr($d, 7, 2) . '-' . substr($d, 9, 2);
+}
+
 function lead_validate(array $lead): array {
     $errors = [];
 
@@ -32,8 +46,7 @@ function lead_validate(array $lead): array {
         $errors[] = 'Имя — не длиннее 80 символов';
     }
 
-    $digits = strlen((string)preg_replace('/\D+/', '', $lead['phone']));
-    if ($digits < 10 || $digits > 15 || mb_strlen($lead['phone'], 'UTF-8') > 30) {
+    if (lead_phone_format($lead['phone']) === '') {
         $errors[] = 'Проверьте номер телефона';
     }
 
@@ -52,7 +65,7 @@ function lead_message(array $lead, string $when): array {
     $wish = $lead['wish'] !== '' ? $lead['wish'] : '—';
     $body = "Новая заявка с формы «Бесплатный подбор» на prootdyhspb.ru\n\n"
           . "Имя: {$lead['name']}\n"
-          . "Телефон: {$lead['phone']}\n"
+          . 'Телефон: ' . lead_phone_format($lead['phone']) . "\n"
           . "Куда хотите поехать: {$wish}\n\n"
           . "Отправлено: {$when}\n";
 

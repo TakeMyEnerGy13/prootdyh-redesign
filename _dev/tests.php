@@ -224,7 +224,14 @@ t_eq(count(lead_validate(['wish' => str_repeat('я', 501)] + $lead)), 1, 'пож
 $m = lead_message(['wish' => 'море, сентябрь'] + $lead, '11.09.2026 14:05');
 t_eq(mb_decode_mimeheader($m['subject']), 'Заявка с сайта: Анна', 'тема декодируется');
 $body = base64_decode($m['body']);
-t_true(str_contains($body, 'Телефон: +7 (921) 883-24-24'), 'телефон в письме');
+t_true(str_contains($body, 'Телефон: +7(921)883-24-24'), 'телефон в письме в едином формате');
+
+t_eq(lead_phone_format('+7(999)688-77-97'), '+7(999)688-77-97', 'формат маски проходит как есть');
+t_eq(lead_phone_format('89996887797'), '+7(999)688-77-97', 'ведущая 8 становится +7');
+t_eq(lead_phone_format('9996887797'), '+7(999)688-77-97', 'десять цифр — дописывается 7');
+t_eq(lead_phone_format('+7 999 688-77-97 1'), '', 'двенадцать цифр — отказ');
+t_eq(lead_phone_format('+380 99 688 77 97'), '', 'не российский номер — отказ');
+t_eq(count(lead_validate(['phone' => '+7(999)688-77'] + $lead)), 1, 'недобитый номер — ошибка');
 t_true(str_contains($body, 'Куда хотите поехать: море, сентябрь'), 'пожелание в письме');
 t_true(str_contains(base64_decode(lead_message($lead, 'x')['body']), 'Куда хотите поехать: —'), 'пустое пожелание — прочерк');
 t_true(str_contains($m['headers']['From'], '<info@prootdyhspb.ru>'), 'From на домене сайта');
