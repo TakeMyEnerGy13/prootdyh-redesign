@@ -26,7 +26,8 @@ function lead_from_post(array $post): array {
 /** Russian number as +7(999)688-77-97, or '' if it is not 11 digits (a leading 8 counts as 7). */
 function lead_phone_format(string $phone): string {
     $d = (string)preg_replace('/\D+/', '', $phone);
-    if (strlen($d) === 10) {
+    // Ten digits mean "no country code" only when no "+" was typed: "+7(921)883-24-2" is incomplete, not 7-prefixed.
+    if (strlen($d) === 10 && !str_starts_with(ltrim($phone), '+')) {
         $d = '7' . $d;
     } elseif (strlen($d) === 11 && $d[0] === '8') {
         $d = '7' . substr($d, 1);
